@@ -52,6 +52,20 @@ class shopStoreSiteaccessType extends eZWorkflowEventType
 
 		return eZWorkflowType::STATUS_ACCEPTED;
 	}
+
+	public static function fix( $output ) {
+		$basket = eZBasket::currentBasket( false );
+		$items  = eZOrderItem::fetchListByType( $basket['order_id'], 'siteaccess' );
+		if( count( $items ) > 0 ) {
+			$item = $items[0];
+			if( $item->attribute( 'description' ) != $GLOBALS['eZCurrentAccess']['name'] ) {
+				$item->setAttribute( 'description', $GLOBALS['eZCurrentAccess']['name'] );
+				$item->store();
+			}
+		}
+
+		return $output;
+	}
 }
 
 eZWorkflowEventType::registerEventType(
