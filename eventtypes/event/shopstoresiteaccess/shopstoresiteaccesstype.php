@@ -54,8 +54,12 @@ class shopStoreSiteaccessType extends eZWorkflowEventType
 	}
 
 	public static function fix( $output ) {
-		$basket = eZBasket::currentBasket( false );
-		$items  = eZOrderItem::fetchListByType( $basket['order_id'], 'siteaccess' );
+		$basket = eZBasket::currentBasket();
+		if( $basket instanceof eZBasket === false ) {
+			return $output;
+		}
+
+		$items  = eZOrderItem::fetchListByType( $basket->attribute( 'order_id' ), 'siteaccess' );
 		if( count( $items ) > 0 ) {
 			$item = $items[0];
 			if( $item->attribute( 'description' ) != $GLOBALS['eZCurrentAccess']['name'] ) {
