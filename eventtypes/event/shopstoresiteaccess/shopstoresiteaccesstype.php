@@ -34,8 +34,14 @@ class shopStoreSiteaccessType extends eZWorkflowEventType
 		}
 
 		$check = eZOrderItem::fetchListByType( $order->attribute( 'id' ), 'siteaccess' );
-		if( count( $check ) > 0 ) {
+		if( count( $check ) > 0 && $order->attribute( 'is_temporary' ) ) {
 			return eZWorkflowEventType::STATUS_ACCEPTED;
+		}
+
+		if( count( $check ) > 0 ) {
+			foreach( $check as $item ) {
+				$item->remove();
+			}
 		}
 
 		$orderItem = new eZOrderItem(
