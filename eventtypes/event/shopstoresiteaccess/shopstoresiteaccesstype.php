@@ -17,7 +17,7 @@ class shopStoreSiteaccessType extends eZWorkflowEventType
 		$this->setTriggerTypes(
 			array(
 				'shop' => array(
-					'confirmorder' => array( 'before' )
+					'confirmorder' => array( 'before', 'after' )
 				)
 			)
 		);
