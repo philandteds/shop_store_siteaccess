@@ -34,7 +34,7 @@ class shopStoreSiteaccessType extends eZWorkflowEventType {
         }
 
         $check = eZOrderItem::fetchListByType( $order->attribute( 'id' ), 'siteaccess' );
-        if( count( $check ) > 0 && $order->attribute( 'is_temporary' ) ) {
+        if( count( $check ) > 0 && $order->attribute( 'is_temporary' ) && $process->ParameterList['trigger_name'] != 'post_checkout' ) {
             return eZWorkflowEventType::STATUS_ACCEPTED;
         }
 
