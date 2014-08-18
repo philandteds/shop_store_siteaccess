@@ -24,6 +24,11 @@ class shopStoreSiteaccessType extends eZWorkflowEventType {
     }
 
     public function execute( $process, $event ) {
+        // we should not do nothing, if it is called from CLI
+        if( eZSys::isShellExecution() ) {
+            return eZWorkflowEventType::STATUS_ACCEPTED;
+        }
+
         $parameters = $process->attribute( 'parameter_list' );
         if( isset( $parameters['order_id'] ) === false ) {
             return eZWorkflowEventType::STATUS_ACCEPTED;
@@ -93,4 +98,3 @@ class shopStoreSiteaccessType extends eZWorkflowEventType {
 eZWorkflowEventType::registerEventType(
     shopStoreSiteaccessType::TYPE_ID, 'shopStoreSiteaccessType'
 );
-?>
