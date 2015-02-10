@@ -81,6 +81,16 @@ class shopStoreSiteaccessType extends eZWorkflowEventType {
             return $output;
         }
 
+        // Check if there is "active" multisafepay transaction
+        if( class_exists( 'MultiSafepayTransaction' ) ) {
+            $transcation = eZPersistentObject::fetchObject(
+                    MultiSafepayTransaction::definition(), null, array( 'order_id' => $basket->attribute( 'order_id' ) ), true
+            );
+            if( $transcation instanceof MultiSafepayTransaction ) {
+                return $output;
+            }
+        }
+
         $items = eZOrderItem::fetchListByType( $basket->attribute( 'order_id' ), 'siteaccess' );
         if( count( $items ) > 0 ) {
             $item = $items[0];
